@@ -1,0 +1,29 @@
+@import "../../style/variety.scss";
+
+.logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: $space-normal $space-big $space-normal 0;
+  float: left;
+  line-height: 31px;
+  text-align: center;
+  color: #bcbcbc;
+}
+
+.profileWrapper {
+  float: right;
+  display: flex;
+  align-items: center;
+
+  > .profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  > .loginBtn {
+    margin-left: $font-large;
+  }
+}
+

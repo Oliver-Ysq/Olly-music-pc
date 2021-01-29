@@ -1,10 +1,9 @@
 import React from "react"
+import {Layout} from "antd";
 
 const Footer = () => {
     return (
-        <footer>
-            footer
-        </footer>
+        <Layout.Footer style={{textAlign: 'center'}}>created by @Oliver</Layout.Footer>
     )
 }
 

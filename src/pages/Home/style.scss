@@ -1,0 +1,41 @@
+@import "../../style/variety.scss";
+
+.ant-card-body {
+  padding: 16px 10px !important;
+}
+
+.ant-card-meta-description {
+  font-size: $font-tiny;
+}
+
+.home-wrapper {
+  > .title {
+    text-align: center;
+    font-size: $font-large;
+    font-style: italic;
+    margin-top: $space-small;
+    margin-bottom: $space-small;
+  }
+
+  .carousel-item-wrapper {
+    padding: $space-big;
+
+    .carousel-item-img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  > .recommend-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  > .topList-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    .card-wrapper{
+      flex: 0 0 25%
+    }
+  }
+}
