@@ -6,6 +6,7 @@ class HomeStore {
     recommendList: any[] = []
     bannerList: any[] = []
     topList: any[] = []
+    dailyRecommendList: any[] = []
 
 
     constructor() {
@@ -14,7 +15,7 @@ class HomeStore {
 
     //获得banner列表
     getBannerList() {
-        return new Promise((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             instance.get(`/banner`)
                 .then((res) => {
                     this.setBannerList(res.data.banners)
@@ -36,6 +37,7 @@ class HomeStore {
         })
     }
 
+    // 获取榜单信息
     getTopList() {
         return new Promise<any>((resolve, reject) => {
             instance.get(`/toplist`)
@@ -47,7 +49,24 @@ class HomeStore {
         })
     }
 
+    // 获得每日推荐歌单
+    getDailyRecommendList() {
+        return new Promise<any>((resolve, reject) => {
+            instance.get(`/recommend/songs?timestamp=${new Date().getTime()}`)
+                .then(res => {
+                    this.setDailyRecommendList(res.data.data.dailySongs)
+                    resolve(res.data)
+                })
+                .catch((res) => {
+                    this.setDailyRecommendList([])
+                    reject(1)
+                })
+
+        })
+    }
+
     setRecommendList(list: any[]) {
+        console.log(list)
         this.recommendList = list
     }
 
@@ -57,6 +76,10 @@ class HomeStore {
 
     setTopList(list: any[]) {
         this.topList = list
+    }
+
+    setDailyRecommendList(list: []) {
+        this.dailyRecommendList = list
     }
 }
 

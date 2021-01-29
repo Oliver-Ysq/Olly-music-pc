@@ -1,3 +1,5 @@
+@import "../../style/variety.scss";
+
 .card-wrapper {
   flex: 0 0 20%;
   display: flex;
@@ -10,9 +12,17 @@
       width: 100%;
       border-radius: 4px !important;
     }
+
+    img {
+      box-shadow: 0.4rem 0.4rem $space-small rgba(0, 0, 0, .5) !important
+    }
   }
 }
 
 .ant-card-bordered {
   border: none !important;
+}
+
+.ant-card {
+  background: rgb(240, 242, 245) !important;
 }

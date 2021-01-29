@@ -3,9 +3,10 @@ import {useStores} from "../../store";
 import "./style.scss"
 import Setup from "./Setup";
 import Login from "./Login";
+import { RouteComponentProps } from "react-router-dom";
 
 interface IProps {
-    routerProps: any
+    routerProps: RouteComponentProps
 }
 
 const Auth: React.FC<IProps> = (props) => {

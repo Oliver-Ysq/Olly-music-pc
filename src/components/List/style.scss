@@ -1,0 +1,35 @@
+@import "../../style/variety.scss";
+
+.list-wrapper {
+  width: 100%;
+
+  > .list-item-wrapper {
+    padding: $space-big $space-normal;
+    border-bottom: 2px solid #dedede;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:hover {
+      background: #dedede;
+    }
+
+    .list-item-name {
+      flex: 1;
+    }
+
+    .list-item-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .list-item-singer {
+      }
+
+      .list-item-buttons {
+      }
+    }
+
+  }
+}

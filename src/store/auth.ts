@@ -7,14 +7,10 @@ interface checkPhoneData {
     }
 }
 
-enum loginState {
-    unLogin = 0,
-    haveLogin = 1
-}
 
 class AuthStore {
 
-    loginState: number = loginState.unLogin //登录状态
+    loginState: number = 0 //登录状态
     phone: string | undefined = ""   //手机号
     id: string | undefined = "" //id
     nickname: string | undefined = ""    //昵称
@@ -26,9 +22,7 @@ class AuthStore {
     }
 
     setAuthInfo(phone: string, id: string, nickname: string, avaUrl: string, state: number) {
-        console.log(arguments)
         this.phone = phone
-
         this.id = id
         this.loginState = state
         this.nickname = nickname
@@ -38,7 +32,7 @@ class AuthStore {
     //登录账号
     login(phone: string, password: string) {
         return new Promise<any>((resolve, reject) => {
-            instance.get(`/login/cellphone?phone=${phone}&password=${password}`)
+            instance.get(`/login/cellphone?timestamp=${new Date().getTime()}&phone=${phone}&password=${password}`)
                 .then(async (res) => {
                     this.setAuthInfo(phone, res.data.account.id, res.data.profile.nickname, res.data.profile.avatarUrl, 1)
                     resolve(res)
@@ -51,7 +45,7 @@ class AuthStore {
     //注销账号
     logout() {
         return new Promise((resolve, reject) => {
-            instance.get(`/logout`)
+            instance.get(`/logout?timestamp=${new Date().getTime()}`)
                 .then(res => {
                     this.setAuthInfo("", "", "", "", 0)
                     resolve(res.data)
@@ -83,8 +77,17 @@ class AuthStore {
         }
 
         return new Promise<IRes | any>((resolve, reject) => {
-            instance.post(`/login/status`)
-                .then((res: IRes) => resolve(res.data.data))
+            instance.post(`/login/status?timestamp=${new Date().getTime()}`)
+                .then((res: IRes) => {
+                    if (res.data.data.account !== null) {
+                        let result: any = res.data.data
+                        this.setAuthInfo("", result.account.id, result.profile.nickname, result.profile.avatarUrl, 1)
+                        resolve(result)
+                    } else {
+                        console.log("未登录")
+                        reject(res)
+                    }
+                })
                 .catch((res: any) => reject(res))
         })
     }
@@ -93,7 +96,7 @@ class AuthStore {
     getCaptcha(phone: string) {
         return new Promise<any>((resolve, reject) => {
             if (!!phone && phone.length === 11) {
-                instance.get(`/captcha/sent?phone=${phone}`)
+                instance.get(`/captcha/sent?timestamp=${new Date().getTime()}&phone=${phone}`)
                     .then((res) => resolve(res))
                     .catch(err => reject(err))
             } else {
@@ -105,7 +108,7 @@ class AuthStore {
     //检查手机号码是否被注册过
     checkPhoneValidation(phone: string) {
         return new Promise<checkPhoneData>((resolve, reject) => {
-            instance.get(`/cellphone/existence/check?phone=${phone}`)
+            instance.get(`/cellphone/existence/check?phone=${phone}&timestamp=${new Date().getTime()}`)
                 .then((res: checkPhoneData) => resolve(res))
                 .catch((res: any) => reject(res))
         })

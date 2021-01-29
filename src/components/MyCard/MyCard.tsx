@@ -1,19 +1,22 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Card} from "antd"
 import "./style.scss"
+import {useHistory} from "react-router-dom";
 
 interface IProps {
     url: string;
     text: string;
     id: string;
+    trackCount: number,
+    playCount: number,
+    description: string
+
 }
 
-const MyCard: React.FC<IProps> = ({url, text, id}) => {
-    useEffect(() => {
-
-    })
+const MyCard: React.FC<IProps> = ({url, text, id, trackCount, playCount, description}) => {
+    const history = useHistory()
     const gotoAlbum = () => {
-        console.log(id)
+        history.push({pathname: `/albumInfo/${id}`, state: {picUrl: url, text, trackCount, playCount, description}})
     }
     return (
         <div className="card-wrapper">

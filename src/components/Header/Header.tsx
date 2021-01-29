@@ -1,5 +1,5 @@
 import React, {useEffect} from "react"
-import {Menu, Modal} from "antd";
+import {Menu, Modal, notification} from "antd";
 import {NavLink as Link} from "react-router-dom";
 // @ts-ignore
 import url from "../../assets/user.png";
@@ -10,24 +10,29 @@ import {useStores} from "../../store";
 import {useHistory} from "react-router"
 
 const Header = observer(() => {
-    const {AuthStore} = useStores()
+    const {AuthStore, HomeStore} = useStores()
     const history = useHistory()
 
-    useEffect(() => {
-        (async function () {
-            let res = await AuthStore.checkLoginState()
-            if (res.account !== null) {
-                console.log(res)
-                AuthStore.setAuthInfo("", res.account.id, res.profile.nickname, res.profile.avatarUrl, 1)
-            } else {
-                console.log(res)
-            }
-        })()
 
-    }, [AuthStore])
+    useEffect(() => {
+        const loadTasks = [AuthStore.checkLoginState(), HomeStore.getBannerList(), HomeStore.getDailyRecommendList(), HomeStore.getTopList(), HomeStore.getRecommendList()]
+        Promise.allSettled(loadTasks).then((res: any) => {
+            res.forEach((v: any) => {
+                if (v.status === "rejected" && v.reason === 1) {
+                    notification["warning"]({
+                        message: 'warning！',
+                        description: "部分内容需登录后才可查看哦",
+                        placement: "bottomRight"
+                    });
+                }
+            })
+
+        })
+    }, [HomeStore, AuthStore.nickname, AuthStore])
+
+
     const handleLogout = () => {
         AuthStore.logout().then((res) => {
-            console.log('logout', res)
             Modal.success({
                 title: "success",
                 content: "注销成功",
@@ -48,7 +53,7 @@ const Header = observer(() => {
                     <img src={AuthStore.avaUrl || url} className="profile" alt=""/>
                     <div className="loginBtn">
                         {AuthStore.loginState === 0 ? <Link to="/login">登录</Link> :
-                            <div onClick={handleLogout}>注销</div>}
+                            <Link to="/" onClick={handleLogout}>注销</Link>}
                     </div>
                 </div>
             </Menu>
